@@ -1,2 +1,2 @@
-# Wulang-eps2
-Wulang environment v2
+# Wuvy
+Wuvy environment
