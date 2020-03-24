@@ -1,1 +1,7 @@
-wcc/wcc.exe
+compiler/Makefile
+
+clike-style-compiler/*
+clike-style-compiler/
+
+old-compiler/*
+old-compiler/
