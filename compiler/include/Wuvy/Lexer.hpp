@@ -1,11 +1,12 @@
 #pragma once
 
-#include <Wuvy/Utils/Types.hpp>
+#include <Wuvy/Common/Types.hpp>
 #include <Wuvy/Utils/Functions.hpp>
 #include <string>
 #include <Wuvy/Common/Patterns/Visitor.hpp>
 
 namespace Lexer {
+  using namespace Common;
   using namespace Utils;
 
   class Location {
@@ -27,7 +28,9 @@ namespace Lexer {
     int m_Line = 0, m_Col = 0;
   };
 
-  class BaseToken : public Patterns::Visitable<void> {
+  using VisitorTraits = Patterns::VisitorTraits<void>;
+
+  class BaseToken : public Patterns::BaseVisitable<VisitorTraits> {
   public:
     BaseToken(Location location) : m_Location(location) {}
     virtual ~BaseToken() = default;
@@ -40,7 +43,8 @@ namespace Lexer {
   protected:
     Location m_Location;
   };
-  using TokenList = Types::List<Types::PShared<BaseToken>>;
+  using TokenContainer = Types::PShared<BaseToken>;
+  using TokenList = Types::List<TokenContainer>;
 
   class IdentToken : public BaseToken {
   public:
@@ -57,7 +61,7 @@ namespace Lexer {
     std::string m_Ident;
   };
 
-  using KeywordId = int;
+  using KeywordId = int; // Language::Keywords;
 
   class KeywordToken : public BaseToken {
   public:
@@ -75,7 +79,7 @@ namespace Lexer {
     KeywordId m_Ident = 0;
   };
 
-  using OperatorId = int;
+  using OperatorId = int; 
 
   class OperatorToken : public BaseToken {
   public:
@@ -115,13 +119,19 @@ namespace Lexer {
     Instance(Types::StringDataset<KeywordId> keywords, Types::StringDataset<OperatorId> operators) : m_Keywords(keywords), m_Operators(operators) {}
 
 
-    void restoreToken(Types::PShared<BaseToken> token) { m_CurrentTokenList.push_front(token); }
-    Types::PShared<BaseToken> getToken() { 
+
+    void restoreToken(TokenContainer token) { m_CurrentTokenList.push_front(token); }
+    TokenContainer getToken() { 
       if(m_CurrentTokenList.empty()) return Functions::pMakeShared<EndToken>();
       //auto ret = m_CurrentTokenList.back(); m_CurrentTokenList.pop_back(); return ret;
       auto v = m_CurrentTokenList.front();
       m_CurrentTokenList.pop_front();
       return v;
+    }
+    TokenContainer peekToken() {
+      auto res = getToken();
+      restoreToken(res);
+      return res;
     }
 
 
@@ -135,7 +145,7 @@ namespace Lexer {
     Types::StringDataset<KeywordId> m_Keywords;
     Types::StringDataset<OperatorId> m_Operators;
 
-    int m_CurrentTokenIndex;
+    // int m_CurrentTokenIndex;
   };  
 
 }

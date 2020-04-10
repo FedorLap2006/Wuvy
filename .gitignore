@@ -5,3 +5,9 @@ clike-style-compiler/
 
 old-compiler/*
 old-compiler/
+
+old-compiler2/
+old-compiler2/*
+
+build/
+build/*
