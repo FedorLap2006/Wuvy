@@ -1,13 +1,18 @@
-compiler/Makefile
+# compiler/Makefile
 
-clike-style-compiler/*
-clike-style-compiler/
+# clike-style-compiler/*
+# clike-style-compiler/
 
-old-compiler/*
-old-compiler/
+# old-compiler/*
+# old-compiler/
 
-old-compiler2/
-old-compiler2/*
+# old-compiler2/
+# old-compiler2/*
 
-build/
-build/*
+**/build/*
+**/subprojects/*
+!**/subprojects/*.wrap
+old-*/*
+
+.vs*/*
+.idea/*
