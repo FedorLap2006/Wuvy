@@ -1,0 +1,30 @@
+import std::io::console;
+
+
+@decorator_fnc
+fnc foo[f: fnc(void) -> void](param: int) -> void {
+  print("something")
+  console::print("Another something: {}", param);
+  f()
+}
+
+#[foo(1)]
+fnc bar() -> void {
+  print("something inside");
+}
+
+fnc main() -> void {
+  print("Embedded print operator");
+  console::print("More powerful print inside console package");
+  
+  a := "Variable creating 'on the fly'";
+  var b = "Traditional variable creating (but without type)";
+  var c: string = "With type";
+    
+  bar(); // Will print: something<EOL>Another something: 1<EOL>something inside
+  
+  "You can just write comments like this"
+  "By the way, as you can see, semicolon at the end of line isn't required, so, you can use it or not - it is your decision"
+  
+  ret;  
+}
